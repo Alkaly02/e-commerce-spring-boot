@@ -117,7 +117,7 @@ Les fonctionnalités sont organisées par domaine (acteur) pour respecter le pri
 - Génération de token JWT
 - Gestion des rôles (CLIENT, ADMIN, LIVREUR)
 
-### 👤 Domaine Client
+### Domaine Client
 - **Catalogue** : Consultation du catalogue de produits
 - **Panier** : Ajout, modification de quantité, suppression de produits
 - **Commandes** : Validation de commandes, calcul automatique du montant total, consultation de l'historique
@@ -239,12 +239,12 @@ src/main/java/com/e_com/e_com_spring/
 
 ### Avantages de cette architecture
 
-✅ **Maintenabilité** : Chaque domaine est indépendant, facilitant les modifications
-✅ **Testabilité** : Services isolés et interfaces claires
-✅ **Scalabilité** : Facilite l'ajout de nouvelles fonctionnalités par domaine
-✅ **Clarté** : Structure intuitive reflétant les acteurs métier
-✅ **Réutilisabilité** : Services réutilisables au sein d'un même domaine
-✅ **Séparation des responsabilités** : Chaque service a un rôle précis et limité
+**Maintenabilité** : Chaque domaine est indépendant, facilitant les modifications
+**Testabilité** : Services isolés et interfaces claires
+**Scalabilité** : Facilite l'ajout de nouvelles fonctionnalités par domaine
+**Clarté** : Structure intuitive reflétant les acteurs métier
+**Réutilisabilité** : Services réutilisables au sein d'un même domaine
+**Séparation des responsabilités** : Chaque service a un rôle précis et limité
 
 ## Tests
 
@@ -282,7 +282,7 @@ Les migrations de base de données sont gérées par Liquibase et se trouvent da
 
 MIT
 
-## ****Auteur
+## Auteur
 
 alkaly02
 

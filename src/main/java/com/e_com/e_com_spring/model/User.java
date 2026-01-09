@@ -35,6 +35,8 @@ public class User extends Audit {
     @NotBlank
     private String password;
 
+    private boolean enabled;
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")

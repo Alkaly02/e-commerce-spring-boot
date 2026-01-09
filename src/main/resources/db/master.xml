@@ -5,11 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <preConditions>
-        <runningAs  username="liquibase"/>
-    </preConditions>
-
-    <include file="changelog/2026_01_09_1767909716_create_users_tables.xml"
+    <include file="changelog/2026_01_09_1767909716_create_privileges_tables.xml"
+             relativeToChangelogFile="true" />
+    <include file="changelog/2026_01_09_1767910394_create_roles_table.xml"
+             relativeToChangelogFile="true" />
+    <include file="changelog/2026_01_09_1767910395_create_roles_privileges_table.xml"
+             relativeToChangelogFile="true" />
+    <include file="changelog/2026_01_09_1767910396_add_foreign_in_roles_and_privileges_tables.xml"
+             relativeToChangelogFile="true" />
+    <include file="changelog/2026_01_09_1767910476_create_users_table.xml"
              relativeToChangelogFile="true" />
 
 </databaseChangeLog>

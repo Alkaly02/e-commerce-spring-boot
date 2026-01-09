@@ -22,7 +22,7 @@
             <column name="password" type="varchar(100)">
                 <constraints nullable="false " />
             </column>
-            <column name="role_id" type="int">
+            <column name="role_id" type="BIGINT">
                 <constraints
                         nullable="false"
                         foreignKeyName="fk_users_role"

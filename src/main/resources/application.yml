@@ -3,7 +3,7 @@ spring:
     name: e-com-spring
 
   datasource:
-    url: jdbc:postgresql//localhost:5433/e_com_spring
+    url: jdbc:postgresql://localhost:5433/e_com_spring
     username: postgres
     password: npmstart
     driver-class-name: org.postgresql.Driver

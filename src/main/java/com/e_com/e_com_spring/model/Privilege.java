@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "privileges")
 public class Privilege extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,10 @@ spring:
   application:
     name: e-com-spring
 
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/master.xml
+
   datasource:
     url: jdbc:postgresql://localhost:5433/e_com_spring
     username: postgres
@@ -12,5 +16,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     show-sql: true
+
+logging:
+  level:
+    liquibase: INFO

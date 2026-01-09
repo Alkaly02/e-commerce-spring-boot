@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "roles")
 public class Role extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

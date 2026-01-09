@@ -13,7 +13,7 @@ Le système permet de gérer la vente de produits en ligne avec les fonctionnali
 - Gestion des livraisons
 - Administration de la plateforme
 
-Le projet adopte une architecture orientée services (API REST) afin de permettre une intégration avec plusieurs clients (Web, Mobile, etc.).
+Le projet adopte une **architecture orientée services (API REST)** organisée par **domaine/acteur** avec le principe de **single responsibility**, permettant une intégration avec plusieurs clients (Web, Mobile, etc.) et garantissant une meilleure maintenabilité et testabilité.
 
 ## Technologies utilisées
 
@@ -109,40 +109,30 @@ Le système utilise JWT (JSON Web Token) pour l'authentification :
 
 ## Fonctionnalités principales
 
-### Authentification et Autorisation
+Les fonctionnalités sont organisées par domaine (acteur) pour respecter le principe de single responsibility.
+
+### Authentification (Domaine partagé)
 - Inscription des utilisateurs
 - Connexion avec email et mot de passe
 - Génération de token JWT
 - Gestion des rôles (CLIENT, ADMIN, LIVREUR)
 
-### Gestion des utilisateurs
-- Consultation de la liste des utilisateurs (Admin)
-- Activation/désactivation d'un utilisateur (Admin)
+### 👤 Domaine Client
+- **Catalogue** : Consultation du catalogue de produits
+- **Panier** : Ajout, modification de quantité, suppression de produits
+- **Commandes** : Validation de commandes, calcul automatique du montant total, consultation de l'historique
+- **Paiement** : ⚠️ Simulation de paiement (service externe non intégré), enregistrement du statut
 
-### Gestion des produits
-- CRUD complet sur les produits (Admin)
-- Gestion des catégories de produits
-- Consultation du catalogue (Clients)
+### Domaine Admin
+- **Produits** : CRUD complet sur les produits
+- **Catégories** : Gestion des catégories de produits
+- **Utilisateurs** : Consultation de la liste, activation/désactivation
+- **Livraisons** : Attribution d'une commande à un livreur
 
-### Panier
-- Ajout de produits au panier
-- Modification de la quantité
-- Suppression de produits du panier
+### Domaine Livreur
+- **Livraisons** : Mise à jour du statut de livraison
 
-### Commandes
-- Validation de commandes
-- Calcul automatique du montant total
-- Consultation de l'historique des commandes
-
-### Paiement
-- ⚠️ **Simulation de paiement** (service externe non intégré)
-- Enregistrement du statut du paiement
-
-### Livraison
-- Attribution d'une commande à un livreur (Admin)
-- Mise à jour du statut de livraison (Livreur)
-
-## 🔒 Exigences non fonctionnelles
+## Exigences non fonctionnelles
 
 ### Performance
 - L'API doit répondre en moins de 2 secondes pour 95% des requêtes
@@ -160,20 +150,101 @@ Le système utilise JWT (JSON Web Token) pour l'authentification :
 - Architecture supportant la montée en charge horizontale
 
 ### Maintenabilité
-- Architecture claire et modulaire
-- Code respectant les bonnes pratiques
+- Architecture claire organisée par domaine (single responsibility)
+- Code respectant les bonnes pratiques (SOLID)
+- Séparation des responsabilités par acteur métier
 
 ## Architecture
 
-Le projet suit une architecture modulaire avec :
-- **Controllers** : Points d'entrée de l'API REST
-- **Services** : Logique métier
-- **Repositories** : Accès aux données (JPA)
-- **Models/Entities** : Entités de la base de données
-- **DTOs** : Objets de transfert de données
-- **Mappers** : Conversion entre entités et DTOs (MapStruct)
-- **Security** : Configuration de sécurité et JWT
-- **Config** : Configurations diverses
+Le projet adopte une **architecture orientée single responsibility** et organisée **par domaine (acteur)**. Chaque domaine encapsule ses propres responsabilités, garantissant une séparation claire des préoccupations et une meilleure maintenabilité.
+
+### Principes architecturaux
+
+- **Single Responsibility Principle (SRP)** : Chaque service a une responsabilité unique et bien définie
+- **Organisation par domaine/acteur** : Le code est structuré selon les acteurs du système (Client, Admin, Livreur)
+- **Séparation des couches** : Controllers, Services, Repositories, DTOs et Mappers sont clairement séparés
+- **Interfaces pour les services** : Chaque service expose une interface (I*Service) garantissant l'abstraction et la testabilité
+
+### Structure par domaine
+
+```
+src/main/java/com/e_com/e_com_spring/
+├── controller/          # Points d'entrée de l'API REST organisés par domaine
+│   ├── admin/          # Controllers pour les opérations administratives
+│   └── auth/           # Controller d'authentification (partagé)
+│
+├── service/            # Logique métier organisée par domaine
+│   ├── admin/          # Services administratifs
+│   │   ├── category/   # Gestion des catégories
+│   │   ├── delivery/   # Gestion des livraisons (vue admin)
+│   │   ├── product/    # Gestion des produits
+│   │   └── user/       # Gestion des utilisateurs
+│   │
+│   ├── auth/           # Service d'authentification (partagé)
+│   │
+│   ├── client/         # Services pour les clients
+│   │   ├── cart/       # Gestion du panier
+│   │   ├── catalog/    # Consultation du catalogue
+│   │   ├── order/      # Gestion des commandes
+│   │   └── payment/    # Gestion des paiements (simulés)
+│   │
+│   └── deliveryPerson/ # Services pour les livreurs
+│       └── delivery/   # Gestion des livraisons (vue livreur)
+│
+├── dto/                # Objets de transfert de données organisés par domaine
+│   ├── auth/           # DTOs d'authentification
+│   └── user/           # DTOs utilisateur
+│
+├── mapper/             # Mappers MapStruct pour conversion Entité ↔ DTO
+│
+├── model/              # Entités JPA et modèles partagés
+│   ├── auditing/       # Infrastructure d'audit
+│   ├── Privilege.java
+│   ├── Role.java
+│   ├── RoleType.java
+│   └── User.java
+│
+├── security/           # Configuration de sécurité et JWT
+│
+└── config/             # Configurations diverses
+    └── auditing/       # Configuration de l'audit
+```
+
+### Domaines fonctionnels
+
+#### 🔐 Domaine Auth (Partagé)
+- **Service** : `service/auth/IAuthService`
+- **Controller** : `controller/auth/AuthenticationController`
+- **Responsabilité** : Gestion de l'authentification et de l'autorisation (inscription, connexion, génération JWT)
+
+#### 👤 Domaine Client
+- **Services** :
+  - `service/client/cart/ICartService` : Gestion du panier
+  - `service/client/catalog/ICatalogService` : Consultation du catalogue
+  - `service/client/order/IOrderService` : Gestion des commandes
+  - `service/client/payment/IPaymentService` : Simulation de paiement
+- **Responsabilités** : Toutes les fonctionnalités dédiées aux clients (consultation, achat, commande)
+
+#### 👨‍💼 Domaine Admin
+- **Services** :
+  - `service/admin/product/IProductService` : CRUD produits
+  - `service/admin/category/ICategoryService` : Gestion des catégories
+  - `service/admin/user/IUserService` : Gestion des utilisateurs
+  - `service/admin/delivery/IDeliveryService` : Attribution des livraisons
+- **Responsabilités** : Administration complète de la plateforme
+
+#### 🚚 Domaine DeliveryPerson (Livreur)
+- **Service** : `service/deliveryPerson/IDeliveryService`
+- **Responsabilité** : Mise à jour du statut des livraisons
+
+### Avantages de cette architecture
+
+✅ **Maintenabilité** : Chaque domaine est indépendant, facilitant les modifications
+✅ **Testabilité** : Services isolés et interfaces claires
+✅ **Scalabilité** : Facilite l'ajout de nouvelles fonctionnalités par domaine
+✅ **Clarté** : Structure intuitive reflétant les acteurs métier
+✅ **Réutilisabilité** : Services réutilisables au sein d'un même domaine
+✅ **Séparation des responsabilités** : Chaque service a un rôle précis et limité
 
 ## Tests
 

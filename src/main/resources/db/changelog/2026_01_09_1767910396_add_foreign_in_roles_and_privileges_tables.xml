@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+>
+    <changeSet id="add_fk_role" author="Moussa Alkaly BADJI">
+        <addForeignKeyConstraint baseTableName="roles_privileges"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_roles_id" 
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+    </changeSet>
+    
+    <changeSet id="add_fk_privilege" author="Moussa Alkaly BADJI">
+        <addForeignKeyConstraint baseTableName="roles_privileges"
+                                 baseColumnNames="privilege_id"
+                                 constraintName="fk_privileges_id"
+                                 referencedTableName="privileges"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

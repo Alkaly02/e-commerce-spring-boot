@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: e-com-spring
+
+  datasource:
+    url: jdbc:postgresql//localhost:5433/e_com_spring
+    username: postgres
+    password: npmstart
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true

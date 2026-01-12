@@ -5,12 +5,10 @@ import com.e_com.e_com_spring.dto.auth.LoginResponseDto;
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.dto.auth.RegisterResponseDto;
 import com.e_com.e_com_spring.service.auth.IAuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class AuthenticationController {
     private final IAuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDto> register(RegisterPostDto postDto) {
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterPostDto postDto) {
         return ResponseEntity.ok(authenticationService.register(postDto));
     }
 

@@ -59,7 +59,7 @@ public class AuthChecker implements IAuthChecker {
         if (!roleExists){
             String joinedRoles = Arrays.stream(RoleType.values())
                     .map(Enum::name)
-                    .collect(Collectors.joining());
+                    .collect(Collectors.joining(", "));
             throw new CustomException("roleType must be one of this: " + joinedRoles, HttpStatus.BAD_REQUEST);
         }
     }

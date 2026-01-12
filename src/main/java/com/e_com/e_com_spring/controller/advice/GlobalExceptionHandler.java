@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+   // TODO: log full exceptions
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> customExceptionHandler(CustomException exception){

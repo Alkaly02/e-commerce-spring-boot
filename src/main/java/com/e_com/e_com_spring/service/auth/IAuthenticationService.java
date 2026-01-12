@@ -7,5 +7,6 @@ import com.e_com.e_com_spring.dto.auth.RegisterResponseDto;
 
 public interface IAuthenticationService {
     RegisterResponseDto register(RegisterPostDto postDto);
+
     LoginResponseDto login(LoginPostDto postDto);
 }

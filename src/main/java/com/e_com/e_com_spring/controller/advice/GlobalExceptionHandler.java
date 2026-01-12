@@ -32,14 +32,21 @@ public class GlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Validation error");
-
         Map<String, String> fieldErrors = new HashMap<>(0);
         exception.getBindingResult().getFieldErrors().forEach(error -> {
             fieldErrors.put(error.getField(), error.getDefaultMessage());
         });
-
         body.put("details", fieldErrors);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException exception){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("error", "Illegal argument");
+        body.put("message", exception.getMessage());
+        // TODO: log trace for debugging
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

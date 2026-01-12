@@ -18,7 +18,7 @@ import java.util.function.Function;
 @Component
 public class JwtService implements IJwtService {
     @Value("${jwt.secret}")
-    public static String SECRET;
+    public String SECRET;
 
     public String generateToken(String email) { // Use email as username
         Map<String, Object> claims = new HashMap<>();

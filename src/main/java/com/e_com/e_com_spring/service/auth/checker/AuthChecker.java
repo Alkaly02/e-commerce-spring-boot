@@ -32,7 +32,7 @@ public class AuthChecker implements IAuthChecker {
     public User ensureEmailExists(String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isEmpty()){
-            throw new CustomException("Email incorrect", HttpStatus.UNAUTHORIZED);
+            throw new CustomException("email or password incorrect", HttpStatus.UNAUTHORIZED);
         }
         return optionalUser.get();
     }
@@ -47,7 +47,7 @@ public class AuthChecker implements IAuthChecker {
     @Override
     public void verifyPassword(LoginPostDto postDto, User user) {
         if (!passwordEncoder.matches(postDto.getPassword(), user.getPassword())){
-            throw new CustomException("Password incorrect", HttpStatus.UNAUTHORIZED);
+            throw new CustomException("email or password incorrect", HttpStatus.UNAUTHORIZED);
         }
     }
 

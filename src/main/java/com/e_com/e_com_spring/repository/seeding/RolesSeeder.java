@@ -16,11 +16,11 @@ public class RolesSeeder {
     private final PrivilegeService privilegeService;
 
     public void seed() {
-        Optional<Role> optionalRole = roleRepository.findByRoleType(RoleType.ADMIN);
+        Optional<Role> optionalRole = roleRepository.findByRoleType(RoleType.ROLE_ADMIN);
         if (optionalRole.isEmpty()){
             Role adminRole = new Role();
             adminRole.setName("Admin");
-            adminRole.setRoleType(RoleType.ADMIN);
+            adminRole.setRoleType(RoleType.ROLE_ADMIN);
             adminRole.setPrivileges(privilegeService.getAll());
             roleRepository.save(adminRole);
         }

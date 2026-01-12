@@ -1,6 +1,7 @@
 package com.e_com.e_com_spring.mapper.user;
 
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
+import com.e_com.e_com_spring.dto.user.UserMiniDto;
 import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.RoleType;
 import com.e_com.e_com_spring.model.User;
@@ -17,6 +18,8 @@ public abstract class UserMapper {
             @Mapping(source = "roleType", target = "role", qualifiedByName = "mapRole")
     )
     public abstract User registerDtoToUser(RegisterPostDto postDto);
+
+    public abstract UserMiniDto toUserMiniDto(User user);
 
     @Named("mapRole")
     protected Role mapRole(String role){

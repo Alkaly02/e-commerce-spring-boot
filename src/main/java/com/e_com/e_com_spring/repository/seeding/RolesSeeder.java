@@ -16,8 +16,7 @@ public class RolesSeeder {
     private final PrivilegeService privilegeService;
 
     public void seed() {
-        System.out.println("================================ ROLE SEEDED ========================");
-        Optional<Role> optionalRole = roleRepository.findByRoleType(RoleType.ADMIN.name());
+        Optional<Role> optionalRole = roleRepository.findByRoleType(RoleType.ADMIN);
         if (optionalRole.isEmpty()){
             Role adminRole = new Role();
             adminRole.setName("Admin");

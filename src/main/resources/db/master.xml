@@ -15,5 +15,7 @@
              relativeToChangelogFile="true" />
     <include file="changelog/2026_01_09_1767910476_create_users_table.xml"
              relativeToChangelogFile="true" />
+    <include file="changelog/2026_01_12_1768219906_insert_default_privileges.xml"
+             relativeToChangelogFile="true" />
 
 </databaseChangeLog>

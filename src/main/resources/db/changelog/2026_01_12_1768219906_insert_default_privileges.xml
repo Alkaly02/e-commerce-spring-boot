@@ -1,0 +1,46 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+>
+    <changeSet id="insert_default_privileges" author="Moussa Alkaly BADJI">
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="1"/><column name="name" value="CREATE_USERS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="2"/><column name="name" value="EDIT_USERS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="3"/><column name="name" value="DELETE_USERS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="4"/><column name="name" value="CREATE_CATEGORIES"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="5"/><column name="name" value="EDIT_CATEGORIES"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="6"/><column name="name" value="DELETE_CATEGORIES"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="7"/><column name="name" value="CREATE_PRODUCTS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="8"/><column name="name" value="EDIT_PRODUCTS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="9"/><column name="name" value="DELETE_PRODUCTS"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="10"/><column name="name" value="ASSIGN_DELIVERY"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="privileges">
+                <where>id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

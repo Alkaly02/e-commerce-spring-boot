@@ -30,9 +30,9 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->{
-                    request.requestMatchers("auth/register", "auth/login").permitAll();
+                    request.requestMatchers("/auth/register", "/auth/login").permitAll();
                     // TODO: check correct swagger index page
-                    request.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "v3/api-docs").permitAll();
+                    request.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs").permitAll();
                     request.anyRequest().authenticated();
                 });
 

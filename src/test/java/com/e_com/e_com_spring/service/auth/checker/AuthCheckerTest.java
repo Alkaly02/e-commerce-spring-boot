@@ -1,5 +1,6 @@
 package com.e_com.e_com_spring.service.auth.checker;
 
+import com.e_com.e_com_spring.dto.auth.LoginPostDto;
 import com.e_com.e_com_spring.exception.CustomException;
 import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.User;
@@ -127,6 +128,39 @@ class AuthCheckerTest {
             when(notEnabledUser.isEnabled()).thenReturn(true);
             // When
             assertDoesNotThrow(() -> authChecker.verifyIfUserEnabled(notEnabledUser));
+        }
+    }
+
+    @Nested
+    class VerifyPasswordTests{
+        @Test
+        void shouldThrowException_WhenPasswordsDoNotMatch(){
+            // Given
+            LoginPostDto loginPostDto = new LoginPostDto();
+            loginPostDto.setEmail(mockedEmailToFind);
+            loginPostDto.setPassword("12345678");
+            authUser.setPassword("hashedPassword");
+            when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+            // When
+            CustomException exception = assertThrows(
+                    CustomException.class,
+                    () -> authChecker.verifyPassword(loginPostDto, authUser)
+            );
+            // Then
+            assertEquals(exception.getMessage(), "email or password incorrect");
+            assertEquals(exception.getStatus(), HttpStatus.UNAUTHORIZED);
+        }
+
+        @Test
+        void shouldNotThrowException_WhenPasswordsDoMatch(){
+            // Given
+            LoginPostDto loginPostDto = new LoginPostDto();
+            loginPostDto.setEmail(mockedEmailToFind);
+            loginPostDto.setPassword("12345678");
+            authUser.setPassword("hashedPassword");
+            when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+            // When
+            assertDoesNotThrow(() -> authChecker.verifyPassword(loginPostDto, authUser));
         }
     }
 

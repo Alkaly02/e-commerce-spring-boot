@@ -164,6 +164,30 @@ class AuthCheckerTest {
         }
     }
 
+    @Nested
+    class ValidateRoleTests{
+        @Test
+        void shouldThrowException_WhenRoleDoesNotExist(){
+            // Given
+            String roleType = "ROLE_NOT";
+            // When
+            CustomException exception = assertThrows(
+                    CustomException.class,
+                    () -> authChecker.validateRole(roleType)
+            );
+            // Then
+            assertEquals(exception.getStatus(), HttpStatus.BAD_REQUEST);
+        }
+
+        @Test
+        void shouldNotThrowException_WhenRoleDoExists(){
+            // Given
+            String roleType = "ROLE_ADMIN";
+            // When
+            assertDoesNotThrow(() -> authChecker.validateRole(roleType));
+        }
+    }
+
 
     private User createUser(Long id, String firstName, String lastName, String email, Role role){
         User mockedUser = new User();

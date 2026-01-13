@@ -98,7 +98,35 @@ class AuthCheckerTest {
             // Then
             assertEquals(exception.getMessage(), "email or password incorrect");
             assertEquals(exception.getStatus(), HttpStatus.UNAUTHORIZED);
-            verify(userRepository, times(1)).findByEmail(anyString());
+            verify(userRepository, times(1)).findByEmail(mockedEmailToFind);
+        }
+    }
+
+    @Nested
+    class VerifyIfUserEnabledTests{
+        @Test
+        void shouldThrowException_WhenUserNotEnabled(){
+            // Given
+            User notEnabledUser = mock(User.class);
+            notEnabledUser.setEnabled(false);
+            when(notEnabledUser.isEnabled()).thenReturn(false);
+            // When
+            CustomException exception = assertThrows(
+                    CustomException.class, () -> authChecker.verifyIfUserEnabled(notEnabledUser)
+            );
+            // Then
+            assertEquals(exception.getMessage(), "Your account is not enabled");
+            assertEquals(exception.getStatus(), HttpStatus.FORBIDDEN);
+        }
+
+        @Test
+        void shouldNotThrowException_WhenUserIsEnabled(){
+            // Given
+            User notEnabledUser = mock(User.class);
+            notEnabledUser.setEnabled(true);
+            when(notEnabledUser.isEnabled()).thenReturn(true);
+            // When
+            assertDoesNotThrow(() -> authChecker.verifyIfUserEnabled(notEnabledUser));
         }
     }
 

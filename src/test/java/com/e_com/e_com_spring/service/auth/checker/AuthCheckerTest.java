@@ -1,6 +1,7 @@
 package com.e_com.e_com_spring.service.auth.checker;
 
 import com.e_com.e_com_spring.exception.CustomException;
+import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -30,12 +31,19 @@ class AuthCheckerTest {
     @InjectMocks
     private AuthChecker authChecker;
 
+    private User authUser;
+    String mockedEmailToFind;
+
     @BeforeEach
     void setUp() {
+        authUser = createUser(1L, "Mocked firstName", "Mocked lastName", "mocked@gmail.com", null);
+        mockedEmailToFind = "mocked@gmail.com";
     }
 
     @AfterEach
     void tearDown() {
+        authUser = null;
+        mockedEmailToFind = null;
     }
 
     @Nested
@@ -43,13 +51,7 @@ class AuthCheckerTest {
         @Test
         void shouldThrowException_WhenEmailExists(){
             // Given
-            User mockedUser = new User();
-            mockedUser.setId(1L);
-            mockedUser.setFirstName("Mocked firstName");
-            mockedUser.setLastName("Mocked lastName");
-            mockedUser.setEmail("mocked@gmail.com");
-            String mockedEmailToFind = "mocked@gmail.com";
-            when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.of(mockedUser));
+            when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.of(authUser));
             // When
             CustomException exception = assertThrows(
                     CustomException.class,
@@ -63,10 +65,49 @@ class AuthCheckerTest {
         @Test
         void shouldNotThrowException_WhenEmailExists(){
             // Given
-            String mockedEmailToFind = "mocked@gmail.com";
             when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.empty());
             // When
             assertDoesNotThrow(() -> authChecker.ensureEmailNotExists(mockedEmailToFind));
         }
+    }
+
+    @Nested
+    class EnsureEmailExistsTests{
+        @Test
+        void shouldReturnUser_WhenEmailExists(){
+            // Given
+            when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.of(authUser));
+            // When
+            User actual = authChecker.ensureEmailExists(mockedEmailToFind);
+            // Then
+            assertNotNull(actual);
+            assertEquals(actual, authUser);
+        }
+        @Test
+        void shouldThrowException_WhenEmailDoesNotExist(){
+            // Given
+            when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.empty());
+            // When
+            CustomException exception = assertThrows(
+                    CustomException.class,
+                    () -> authChecker.ensureEmailExists(mockedEmailToFind)
+            );
+            // Then
+            assertEquals(exception.getMessage(), "email or password incorrect");
+            assertEquals(exception.getStatus(), HttpStatus.UNAUTHORIZED);
+            verify(userRepository, times(1)).findByEmail(anyString());
+        }
+    }
+
+
+    private User createUser(Long id, String firstName, String lastName, String email, Role role){
+        User mockedUser = new User();
+        mockedUser.setId(id);
+        mockedUser.setFirstName(firstName);
+        mockedUser.setLastName(lastName);
+        mockedUser.setEmail(lastName);
+        mockedUser.setRole(role);
+        mockedUser.setEnabled(true);
+        return mockedUser;
     }
 }

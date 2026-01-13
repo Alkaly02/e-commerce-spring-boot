@@ -60,6 +60,7 @@ class AuthCheckerTest {
             // Then
             assertEquals(exception.getMessage(), "User with this email already exists");
             assertEquals(exception.getStatus(), HttpStatus.CONFLICT);
+            verify(userRepository, times(1)).findByEmail(mockedEmailToFind);
         }
 
         @Test
@@ -68,6 +69,7 @@ class AuthCheckerTest {
             when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.empty());
             // When
             assertDoesNotThrow(() -> authChecker.ensureEmailNotExists(mockedEmailToFind));
+            verify(userRepository, times(1)).findByEmail(mockedEmailToFind);
         }
     }
 
@@ -82,6 +84,7 @@ class AuthCheckerTest {
             // Then
             assertNotNull(actual);
             assertEquals(actual, authUser);
+            verify(userRepository, times(1)).findByEmail(mockedEmailToFind);
         }
         @Test
         void shouldThrowException_WhenEmailDoesNotExist(){

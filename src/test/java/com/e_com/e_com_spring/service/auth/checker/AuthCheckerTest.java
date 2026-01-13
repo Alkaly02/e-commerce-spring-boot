@@ -65,7 +65,7 @@ class AuthCheckerTest {
         }
 
         @Test
-        void shouldNotThrowException_WhenEmailDoesNotExists(){
+        void shouldNotThrowException_WhenEmailDoesNotExist(){
             // Given
             when(userRepository.findByEmail(mockedEmailToFind)).thenReturn(Optional.empty());
             // When

@@ -32,6 +32,28 @@ Le projet adopte une **architecture orientée services (API REST)** organisée p
 ### Outils de développement
 - **Maven**
 
+## Qualité et Tests
+
+Ce projet met l'accent sur la **qualité du code** et les **bonnes pratiques de développement** :
+
+### Test-Driven Development (TDD)
+Le projet suit une approche **TDD (Test-Driven Development)** : les tests sont écrits avant ou en parallèle du code de production, garantissant une couverture de code élevée et une meilleure conception des fonctionnalités.
+
+### Tests d'intégration avec Testcontainers
+Les **tests d'intégration** utilisent **Testcontainers** pour créer des environnements de test isolés et réalistes :
+- **PostgreSQL en conteneur Docker** : Chaque test d'intégration s'exécute avec une base de données PostgreSQL réelle dans un conteneur Docker
+- **Tests end-to-end** : Les tests couvrent l'ensemble de la stack (Controller → Service → Repository → Base de données)
+- **Isolation complète** : Chaque test dispose de son propre environnement, garantissant la reproductibilité et l'indépendance des tests
+- **Tests d'API REST** : Utilisation de MockMvc et RestAssured pour tester les endpoints HTTP
+
+### Stratégie de tests
+- **Tests unitaires** : Validation de la logique métier isolée
+- **Tests d'intégration** : Validation du comportement end-to-end avec base de données réelle
+- **Tests de sécurité** : Validation de l'authentification JWT et de l'autorisation par rôles
+- **Couverture de code** : Objectif de maintenir une couverture élevée pour garantir la fiabilité
+
+Cette approche rigoureuse garantit la **fiabilité**, la **maintenabilité** et la **qualité** du code produit.
+
 ## Prérequis
 
 - Java 21 ou supérieur
@@ -248,15 +270,64 @@ src/main/java/com/e_com/e_com_spring/
 
 ## Tests
 
-Les tests sont organisés en :
-- Tests unitaires
-- Tests d'intégration (avec Testcontainers)
+### Approche Test-Driven Development (TDD)
 
-Pour exécuter les tests :
+Ce projet applique rigoureusement les principes du **TDD (Test-Driven Development)** :
+- **Écriture des tests avant le code** : Les spécifications sont d'abord traduites en tests
+- **Refactoring continu** : Le code est amélioré en permanence tout en maintenant les tests verts
+- **Documentation vivante** : Les tests servent de documentation exécutable du comportement attendu
+- **Confiance dans le refactoring** : La suite de tests complète permet de modifier le code en toute sécurité
+
+### Tests d'intégration avec Testcontainers
+
+Les **tests d'intégration** sont au cœur de la stratégie de qualité du projet :
+
+#### Infrastructure de test
+- **Testcontainers** : Utilisation de conteneurs Docker pour créer des environnements de test réalistes
+- **PostgreSQL en conteneur** : Chaque test d'intégration s'exécute avec une instance PostgreSQL isolée
+- **Spring Boot Test** : Configuration complète du contexte Spring pour les tests end-to-end
+- **MockMvc & RestAssured** : Tests des endpoints REST avec validation complète des réponses
+
+#### Avantages
+- **Environnements isolés** : Chaque test dispose de sa propre base de données
+- **Tests reproductibles** : Même environnement à chaque exécution
+- **Tests réalistes** : Utilisation d'une vraie base de données PostgreSQL
+- **Pas de pollution** : Les tests ne s'affectent pas mutuellement
+- **CI/CD ready** : Les tests peuvent s'exécuter dans n'importe quel environnement
+
+#### Exemples de tests d'intégration
+- **Tests d'authentification** : Inscription, connexion, génération de JWT
+- **Tests de sécurité** : Validation des rôles et permissions
+- **Tests de services** : Validation de la logique métier avec persistance réelle
+
+### Organisation des tests
+
+```
+src/test/java/
+├── controller/          # Tests d'intégration des endpoints REST
+├── service/            # Tests unitaires et d'intégration des services
+└── TestcontainersConfiguration.java  # Configuration des conteneurs de test
+```
+
+### Exécution des tests
+
+Pour exécuter tous les tests (unitaires + intégration) :
 
 ```bash
 ./mvnw test
 ```
+
+Pour exécuter uniquement les tests d'intégration :
+
+```bash
+./mvnw test -Dtest=*IntegrationTest
+```
+
+### Métriques de qualité
+
+- **Couverture de code** : Objectif de maintenir une couverture élevée
+- **Tests rapides** : Optimisation pour une exécution rapide des tests unitaires
+- **Tests robustes** : Tests d'intégration complets pour valider le comportement réel
 
 ## Structure de la base de données
 

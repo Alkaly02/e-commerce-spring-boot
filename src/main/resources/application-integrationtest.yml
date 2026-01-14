@@ -1,2 +1,27 @@
-spring.datasource.url = jdbc:h2:mem:test
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.H2Dialect
+spring:
+  application:
+    name: e-com-spring
+
+  liquibase:
+    change-log: classpath:/db/master.xml
+    enabled: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/e_com_spring
+    username: postgres
+    password: npmstart
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+logging:
+  level:
+    liquibase: INFO
+
+jwt:
+  secret: 5367566859703373367639792F423F452848284D6251655468576D5A71347437

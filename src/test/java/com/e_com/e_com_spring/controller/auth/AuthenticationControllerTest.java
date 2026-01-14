@@ -30,9 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
         classes = EComSpringApplication.class
 )
 @AutoConfigureMockMvc
-//@TestPropertySource(
-//        locations = "classpath:application-integrationtest.yml"
-//)
 class AuthenticationControllerTest {
 
     @Autowired

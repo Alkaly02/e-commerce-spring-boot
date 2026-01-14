@@ -52,6 +52,7 @@ class AuthenticationControllerTest {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     private RegisterPostDto registerPostDto;
+    private RegisterPostDto registerPostDtoForLogin;
     private LoginPostDto loginPostDto;
 
     @BeforeAll
@@ -74,21 +75,31 @@ class AuthenticationControllerTest {
     @BeforeEach
     void setUp(){
         RestAssured.baseURI = "http://localhost:" + port;
-        registerPostDto = new RegisterPostDto();
-        registerPostDto.setFirstName("Mocked firstName");
-        registerPostDto.setLastName("Mocked lastName");
-        registerPostDto.setEmail("mocked@gmail.com");
-        registerPostDto.setPassword("passer123");
-        registerPostDto.setRoleType("ROLE_ADMIN");
+        registerPostDto = createRegisterPostDto(
+                "Mocked firstName",
+                "Mocked lastName",
+                "mocked@gmail.com",
+                "passer123",
+                "ROLE_ADMIN"
+        );
+
+        registerPostDtoForLogin = createRegisterPostDto(
+                "Mocked firstName",
+                "Mocked lastName",
+                "login@gmail.com",
+                "passer123",
+                "ROLE_ADMIN"
+        );
 
         loginPostDto = new LoginPostDto();
-        loginPostDto.setEmail("mocked@gmail.com");
+        loginPostDto.setEmail("login@gmail.com");
         loginPostDto.setPassword("passer123");
     }
 
     @AfterEach
     void tearDown(){
         registerPostDto = null;
+        registerPostDtoForLogin = null;
         loginPostDto = null;
     }
 
@@ -138,7 +149,7 @@ class AuthenticationControllerTest {
             mockMvc.perform(
                     post("/auth/register")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(registerPostDto))
+                            .content(objectMapper.writeValueAsString(registerPostDtoForLogin))
             );
             MvcResult result = mockMvc.perform(
                     post("/auth/login")
@@ -170,6 +181,34 @@ class AuthenticationControllerTest {
                     .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("$.message").value("email or password incorrect"));
         }
+
+        @Test
+        void shouldNotLogin_WhenPasswordDosNotMatch() throws Exception{
+            loginPostDto.setPassword("fakePassword");
+
+            mockMvc.perform(
+                    post("/auth/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(registerPostDtoForLogin))
+            );
+            mockMvc.perform(
+                            post("/auth/login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(loginPostDto))
+                    )
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").value("email or password incorrect"));
+        }
+    }
+
+    private RegisterPostDto createRegisterPostDto(String firstName, String lastName, String email, String password, String roleType){
+        RegisterPostDto registerPostDto = new RegisterPostDto();
+        registerPostDto.setFirstName(firstName);
+        registerPostDto.setLastName(lastName);
+        registerPostDto.setEmail(email);
+        registerPostDto.setPassword(password);
+        registerPostDto.setRoleType(roleType);
+        return registerPostDto;
     }
 
 }

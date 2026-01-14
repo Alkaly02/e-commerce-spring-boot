@@ -306,7 +306,7 @@ Les **tests d'intégration** sont au cœur de la stratégie de qualité du proje
 src/test/java/
 ├── controller/          # Tests d'intégration des endpoints REST
 ├── service/            # Tests unitaires et d'intégration des services
-└── TestcontainersConfiguration.java  # Configuration des conteneurs de test
+└── TestContainersConfiguration.java  # Configuration des conteneurs de test
 ```
 
 ### Exécution des tests

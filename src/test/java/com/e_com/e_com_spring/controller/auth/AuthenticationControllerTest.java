@@ -65,6 +65,7 @@ class AuthenticationControllerTest {
         postgres.stop();
     }
 
+    // TODO: TestContainersConfiguration.java
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry){
         registry.add("spring.datasource.url", postgres::getJdbcUrl);

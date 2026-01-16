@@ -4,6 +4,7 @@ import com.e_com.e_com_spring.dto.auth.LoginPostDto;
 import com.e_com.e_com_spring.dto.auth.LoginResponseDto;
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.repository.UserRepository;
+import static com.e_com.e_com_spring.util.UserUtils.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -180,16 +181,6 @@ class AuthenticationControllerTest {
                     .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("$.message").value("email or password incorrect"));
         }
-    }
-
-    private RegisterPostDto createRegisterPostDto(String firstName, String lastName, String email, String password, String roleType){
-        RegisterPostDto registerPostDto = new RegisterPostDto();
-        registerPostDto.setFirstName(firstName);
-        registerPostDto.setLastName(lastName);
-        registerPostDto.setEmail(email);
-        registerPostDto.setPassword(password);
-        registerPostDto.setRoleType(roleType);
-        return registerPostDto;
     }
 
 }

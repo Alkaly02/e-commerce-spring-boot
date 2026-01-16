@@ -27,7 +27,7 @@ Le projet adopte une **architecture orientée services (API REST)** organisée p
 - **MapStruct** (mapping d'objets)
 - **Lombok**
 - **SpringDoc OpenAPI** (documentation API)
-- **Testcontainers** (tests d'intégration)
+- **Testcontainers** (tests d'intégration avec PostgreSQL)
 
 ### Outils de développement
 - **Maven**
@@ -44,7 +44,7 @@ Les **tests d'intégration** utilisent **Testcontainers** pour créer des enviro
 - **PostgreSQL en conteneur Docker** : Chaque test d'intégration s'exécute avec une base de données PostgreSQL réelle dans un conteneur Docker
 - **Tests end-to-end** : Les tests couvrent l'ensemble de la stack (Controller → Service → Repository → Base de données)
 - **Isolation complète** : Chaque test dispose de son propre environnement, garantissant la reproductibilité et l'indépendance des tests
-- **Tests d'API REST** : Utilisation de MockMvc et RestAssured pour tester les endpoints HTTP
+- **Tests d'API REST** : Utilisation de MockMvc pour tester les endpoints HTTP
 
 ### Stratégie de tests
 - **Tests unitaires** : Validation de la logique métier isolée
@@ -284,9 +284,9 @@ Les **tests d'intégration** sont au cœur de la stratégie de qualité du proje
 
 #### Infrastructure de test
 - **Testcontainers** : Utilisation de conteneurs Docker pour créer des environnements de test réalistes
-- **PostgreSQL en conteneur** : Chaque test d'intégration s'exécute avec une instance PostgreSQL isolée
+- **PostgreSQL en conteneur** : Chaque test d'intégration s'exécute avec une instance PostgreSQL isolée via `@Container` et `@ServiceConnection`
 - **Spring Boot Test** : Configuration complète du contexte Spring pour les tests end-to-end
-- **MockMvc & RestAssured** : Tests des endpoints REST avec validation complète des réponses
+- **MockMvc** : Tests des endpoints REST avec validation complète des réponses HTTP
 
 #### Avantages
 - **Environnements isolés** : Chaque test dispose de sa propre base de données
@@ -305,9 +305,11 @@ Les **tests d'intégration** sont au cœur de la stratégie de qualité du proje
 ```
 src/test/java/
 ├── controller/          # Tests d'intégration des endpoints REST
-├── service/            # Tests unitaires et d'intégration des services
-└── TestContainersConfiguration.java  # Configuration des conteneurs de test
+│   └── auth/           # Tests d'authentification avec Testcontainers
+└── service/            # Tests unitaires et d'intégration des services
 ```
+
+**Note** : Les tests d'intégration utilisent directement `@Container` et `@ServiceConnection` de Spring Boot Testcontainers, sans classe de configuration séparée.
 
 ### Exécution des tests
 

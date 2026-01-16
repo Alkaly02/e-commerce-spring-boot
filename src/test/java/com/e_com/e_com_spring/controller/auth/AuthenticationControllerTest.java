@@ -1,26 +1,21 @@
 package com.e_com.e_com_spring.controller.auth;
 
-import com.e_com.e_com_spring.EComSpringApplication;
 import com.e_com.e_com_spring.dto.auth.LoginPostDto;
 import com.e_com.e_com_spring.dto.auth.LoginResponseDto;
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,12 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = EComSpringApplication.class
-)
+@SpringBootTest
 @AutoConfigureMockMvc
 class AuthenticationControllerTest {
 
@@ -46,9 +36,8 @@ class AuthenticationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @LocalServerPort
-    private Integer port;
-
+    @Container
+    @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     private RegisterPostDto registerPostDto;
@@ -65,17 +54,8 @@ class AuthenticationControllerTest {
         postgres.stop();
     }
 
-    // TODO: TestContainersConfiguration.java
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry){
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
-
     @BeforeEach
     void setUp(){
-        RestAssured.baseURI = "http://localhost:" + port;
         registerPostDto = createRegisterPostDto(
                 "Mocked firstName",
                 "Mocked lastName",

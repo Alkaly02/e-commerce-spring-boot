@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IUserService {
-    List<UserMiniDto> getAll(Pageable pageable);
+//    List<UserMiniDto> getAll(Pageable pageable);
     // TODO: update
     UserMiniDto enable(Long userId);
     UserMiniDto disable(Long userId);

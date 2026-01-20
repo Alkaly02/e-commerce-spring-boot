@@ -3,5 +3,5 @@ package com.e_com.e_com_spring.service.admin.user.checker;
 import com.e_com.e_com_spring.model.User;
 
 public interface IChecker {
-    boolean canPerformAction(User currentUser);
+    boolean canPerformAdminAction(User currentUser);
 }

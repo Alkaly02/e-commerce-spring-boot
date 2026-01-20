@@ -18,27 +18,20 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService{
-    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final IChecker checker;
     private final IStatusHandler statusHandler;
 
-//    @Override
-//    public List<UserMiniDto> getAll(Pageable pageable) {
-//        System.out.println("Hello");
-//        return null;
-//    }
-
     @Override
     public UserMiniDto enable(Long userId, User currentUser) {
-        checker.canPerformAction(currentUser);
+        checker.canPerformAdminAction(currentUser);
         User user = statusHandler.handleStatus(userId, true);
         return userMapper.toUserMiniDto(user);
     }
 
     @Override
     public UserMiniDto disable(Long userId, User currentUser) {
-        checker.canPerformAction(currentUser);
+        checker.canPerformAdminAction(currentUser);
         User user = statusHandler.handleStatus(userId, false);
         return userMapper.toUserMiniDto(user);
     }

@@ -31,6 +31,9 @@ public class UserService implements IUserService{
         if (optionalUser.isEmpty()){
             throw new CustomException("User does not exist", HttpStatus.NOT_FOUND);
         }
+        if (!currentUser.isAdmin()){
+            throw new CustomException("You are not allowed to perform this action", HttpStatus.FORBIDDEN);
+        }
         var user = optionalUser.get();
         user.setEnabled(true);
         return userMapper.toUserMiniDto(userRepository.save(user));

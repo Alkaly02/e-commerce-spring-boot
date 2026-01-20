@@ -4,13 +4,10 @@ import com.e_com.e_com_spring.exception.CustomException;
 import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.RoleType;
 import com.e_com.e_com_spring.model.User;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;

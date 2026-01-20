@@ -27,12 +27,12 @@ public class UserService implements IUserService{
 
     @Override
     public UserMiniDto enable(Long userId, User currentUser) {
+        if (!currentUser.isAdmin()){
+            throw new CustomException("You are not allowed to perform this action", HttpStatus.FORBIDDEN);
+        }
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()){
             throw new CustomException("User does not exist", HttpStatus.NOT_FOUND);
-        }
-        if (!currentUser.isAdmin()){
-            throw new CustomException("You are not allowed to perform this action", HttpStatus.FORBIDDEN);
         }
         var user = optionalUser.get();
         user.setEnabled(true);

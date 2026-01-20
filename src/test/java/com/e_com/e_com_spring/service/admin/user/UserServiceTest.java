@@ -54,6 +54,20 @@ class UserServiceTest {
         // Verify if current User has privileges to update the user
         // update user
         @Test
+        void shouldThrowException_WhenUserDoesNotHave_EDIT_USERS_Privilege(){
+            // Given
+            Role role = new Role();
+            role.setRoleType(RoleType.ROLE_CUSTOMER);
+            currentUser.setRole(role);
+            Long userId = 1L;
+            // When
+            CustomException exception = assertThrows(CustomException.class, () -> userService.enable(userId, currentUser));
+            // Then
+            assertEquals(exception.getMessage(), "You are not allowed to perform this action");
+            assertEquals(exception.getStatus(), HttpStatus.FORBIDDEN);
+        }
+
+        @Test
         void shouldEnableUser(){
             // TODO: Create admin user
             // Given
@@ -84,23 +98,6 @@ class UserServiceTest {
             // Then
             assertEquals(exception.getMessage(), "User does not exist");
             assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
-        }
-
-        @Test
-        @Disabled
-        void shouldThrowException_WhenUserDoesNotHave_EDIT_USERS_Privilege(){
-            // Given
-            Role role = new Role();
-            role.setRoleType(RoleType.ROLE_CUSTOMER);
-            currentUser.setRole(role);
-            Long userId = 1L;
-            User user = createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
-            when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-            // When
-            CustomException exception = assertThrows(CustomException.class, () -> userService.enable(userId, currentUser));
-            // Then
-            assertEquals(exception.getMessage(), "You are not allowed to perform this action");
-            assertEquals(exception.getStatus(), HttpStatus.FORBIDDEN);
         }
     }
 

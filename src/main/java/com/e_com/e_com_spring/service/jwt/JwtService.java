@@ -65,8 +65,9 @@ public class JwtService implements IJwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+//        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return !isTokenExpired(token);
     }
 }

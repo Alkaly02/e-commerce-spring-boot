@@ -38,6 +38,8 @@ public class UserService implements IUserService{
 
     @Override
     public UserMiniDto disable(Long userId, User currentUser) {
-        return null;
+        checker.canPerformAction(currentUser);
+        User user = statusHandler.handleStatus(userId, false);
+        return userMapper.toUserMiniDto(user);
     }
 }

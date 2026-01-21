@@ -6,6 +6,7 @@ import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.service.admin.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,13 @@ public class UserController {
     private final IUserService userService;
 
     @PutMapping("{id}/disable")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserMiniDto> disable(@PathVariable Long userId, @CurrentUser User currentUser){
         return ResponseEntity.ok(userService.disable(userId, currentUser));
     }
 
     @PutMapping("{id}/enable")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserMiniDto> enable(@PathVariable Long userId, @CurrentUser User currentUser){
         return ResponseEntity.ok(userService.disable(userId, currentUser));
     }

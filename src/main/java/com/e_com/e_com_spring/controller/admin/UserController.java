@@ -18,7 +18,7 @@ public class UserController {
     private final IUserService userService;
 
     @PutMapping("{id}/disable")
-    public ResponseEntity<UserMiniDto> disable(@PathVariable Long userId, @CurrentUser User currentUser){ // TODO: get current user
+    public ResponseEntity<UserMiniDto> disable(@PathVariable Long userId, @CurrentUser User currentUser){
         return ResponseEntity.ok(userService.disable(userId, currentUser));
     }
 

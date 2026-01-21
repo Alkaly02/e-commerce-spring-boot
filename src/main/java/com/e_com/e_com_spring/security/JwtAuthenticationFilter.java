@@ -39,12 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            else{
-                throw new CustomException("Jeton JWT expired ou invalid", HttpStatus.UNAUTHORIZED);
-            }
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            // TODO: handle jwt exception since it's not handled by the GlobalExceptionHandler
         }
         filterChain.doFilter(request, response);
     }

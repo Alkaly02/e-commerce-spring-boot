@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Role extends Audit {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id")
     )
-    private List<Privilege> privileges;
+    private Collection<Privilege> privileges;
 
     @OneToMany(mappedBy = "role")
     private List<User> users;

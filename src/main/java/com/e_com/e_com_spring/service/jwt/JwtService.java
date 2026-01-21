@@ -1,11 +1,14 @@
 package com.e_com.e_com_spring.service.jwt;
 
+import com.e_com.e_com_spring.exception.CustomException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -54,11 +57,15 @@ public class JwtService implements IJwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try{
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch (JwtException | IllegalArgumentException e){
+            throw new CustomException("Jwt expired or invalid", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     private Boolean isTokenExpired(String token) {

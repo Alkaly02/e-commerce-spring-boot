@@ -1,6 +1,7 @@
 package com.e_com.e_com_spring.controller.advice;
 
 import com.e_com.e_com_spring.exception.CustomException;
+import jakarta.validation.constraints.Null;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -48,5 +49,13 @@ public class GlobalExceptionHandler {
         body.put("message", exception.getMessage());
         // TODO: log trace for debugging
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> nullPointerExceptionHandler(NullPointerException exception){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("error", exception.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

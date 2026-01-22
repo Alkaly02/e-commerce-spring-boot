@@ -16,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.addHeader(
                 HttpHeaders.WWW_AUTHENTICATE,
-                "Bearer error=\"Invalid access token \""
+                "Bearer error=\"Invalid access token\""
         );
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }

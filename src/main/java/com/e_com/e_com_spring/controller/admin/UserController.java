@@ -20,7 +20,7 @@ public class UserController {
 
     @PutMapping("{id}/disable")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserMiniDto> disable(@PathVariable Long userId, @CurrentUser User currentUser){
+    public ResponseEntity<UserMiniDto> disable(@PathVariable(name = "id") Long userId, @CurrentUser User currentUser){
         return ResponseEntity.ok(userService.disable(userId, currentUser));
     }
 

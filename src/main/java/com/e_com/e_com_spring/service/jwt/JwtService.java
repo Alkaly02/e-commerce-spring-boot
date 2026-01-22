@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Component
 public class JwtService implements IJwtService {
     @Value("${jwt.secret}")
@@ -44,6 +46,7 @@ public class JwtService implements IJwtService {
     }
 
     public String extractUsername(String token) {
+        log.info("EXTRACT USERNAME METHOD");
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -58,12 +61,14 @@ public class JwtService implements IJwtService {
 
     private Claims extractAllClaims(String token) {
         try{
+            log.info("EXTRACTING ALL CLAIMS METHOD");
             return Jwts.parserBuilder()
                     .setSigningKey(getSignKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
         }catch (JwtException | IllegalArgumentException e){
+            log.error("JWT EXPIRED OR INVALID");
             throw new CustomException("Jwt expired or invalid", HttpStatus.UNAUTHORIZED);
         }
     }
@@ -73,7 +78,8 @@ public class JwtService implements IJwtService {
     }
 
     public Boolean validateToken(String token) {
-        final String username = extractUsername(token);
+        log.info("INSIDE validateToken METHOD");
+//        final String username = extractUsername(token);
 //        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         return !isTokenExpired(token);
     }

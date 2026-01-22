@@ -1,6 +1,7 @@
 package com.e_com.e_com_spring.security;
 
 import com.e_com.e_com_spring.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 public class CustomUserDetails implements UserDetails {
     private User user;
 
@@ -18,8 +20,11 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        log.info("INSIDE getAuthorities METHOD");
         List<GrantedAuthority> authorities = new ArrayList<>();
+        log.info("ADD ROLE AUTHORITY: {}", user.getRole());
         authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleType().name()));
+        log.info("ADD ALL AUTHORITIES");
         authorities.addAll(
                 user.getRole()
                         .getPrivileges()
@@ -27,6 +32,7 @@ public class CustomUserDetails implements UserDetails {
                         .map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
                         .toList()
         );
+        log.info("RETURN AUTHORITIES");
         return authorities;
     }
 

@@ -1,6 +1,7 @@
 package com.e_com.e_com_spring.security;
 
 import com.e_com.e_com_spring.model.User;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Slf4j
+@Getter
 public class CustomUserDetails implements UserDetails {
     private User user;
 

@@ -11,7 +11,6 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "users")
-@ToString
 public class User extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")

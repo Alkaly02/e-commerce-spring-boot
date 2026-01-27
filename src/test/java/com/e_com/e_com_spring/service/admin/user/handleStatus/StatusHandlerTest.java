@@ -1,16 +1,14 @@
 package com.e_com.e_com_spring.service.admin.user.handleStatus;
 
-import com.e_com.e_com_spring.dto.user.UserMiniDto;
 import com.e_com.e_com_spring.exception.CustomException;
+import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.repository.UserRepository;
-import com.e_com.e_com_spring.util.UserUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
@@ -28,14 +26,11 @@ class StatusHandlerTest {
     @InjectMocks
     private StatusHandler statusHandler;
 
-    @Autowired
-    private UserUtils userUtils;
-
     @Test
     void shouldEnableUser(){
         // Given
         Long userId = 1L;
-        User user = userUtils.createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
+        User user = createUser(userId, "Lka", "Dev", "lka@gmail.com", null);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
         // When
@@ -49,7 +44,7 @@ class StatusHandlerTest {
     void shouldDisableUser(){
         // Given
         Long userId = 1L;
-        User user = userUtils.createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
+        User user = createUser(userId, "Lka", "Dev", "lka@gmail.com", null);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
         // When
@@ -69,5 +64,16 @@ class StatusHandlerTest {
         // Then
         assertEquals(exception.getMessage(), "User does not exist");
         assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+    }
+
+    private User createUser(Long id, String firstName, String lastName, String email, Role role){
+        User user = new User();
+        user.setId(id);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setRole(role);
+        user.setEnabled(true);
+        return user;
     }
 }

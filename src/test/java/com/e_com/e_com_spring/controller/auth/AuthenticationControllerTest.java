@@ -4,7 +4,8 @@ import com.e_com.e_com_spring.dto.auth.LoginPostDto;
 import com.e_com.e_com_spring.dto.auth.LoginResponseDto;
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.repository.UserRepository;
-import static com.e_com.e_com_spring.util.UserUtils.*;
+
+import com.e_com.e_com_spring.util.UserUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -37,6 +38,9 @@ class AuthenticationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserUtils userUtils;
+
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
@@ -57,7 +61,7 @@ class AuthenticationControllerTest {
 
     @BeforeEach
     void setUp(){
-        registerPostDto = createRegisterPostDto(
+        registerPostDto = userUtils.createRegisterPostDto(
                 "Mocked firstName",
                 "Mocked lastName",
                 "mocked@gmail.com",
@@ -65,7 +69,7 @@ class AuthenticationControllerTest {
                 "ROLE_ADMIN"
         );
 
-        registerPostDtoForLogin = createRegisterPostDto(
+        registerPostDtoForLogin = userUtils.createRegisterPostDto(
                 "Mocked firstName",
                 "Mocked lastName",
                 "login@gmail.com",

@@ -17,7 +17,7 @@ public class UserService implements IUserService{
 
     @Override
     public UserMiniDto enable(Long userId, User currentUser) {
-        checker.canPerformAdminAction(currentUser);
+//        checker.canPerformAdminAction(currentUser);
         User user = statusHandler.handleStatus(userId, true);
         return userMapper.toUserMiniDto(user);
     }

@@ -4,16 +4,17 @@ import com.e_com.e_com_spring.dto.user.UserMiniDto;
 import com.e_com.e_com_spring.exception.CustomException;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.repository.UserRepository;
+import com.e_com.e_com_spring.util.UserUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
-import static com.e_com.e_com_spring.util.UserUtils.createUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -27,11 +28,14 @@ class StatusHandlerTest {
     @InjectMocks
     private StatusHandler statusHandler;
 
+    @Autowired
+    private UserUtils userUtils;
+
     @Test
     void shouldEnableUser(){
         // Given
         Long userId = 1L;
-        User user = createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
+        User user = userUtils.createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
         // When
@@ -45,7 +49,7 @@ class StatusHandlerTest {
     void shouldDisableUser(){
         // Given
         Long userId = 1L;
-        User user = createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
+        User user = userUtils.createUser(userId,"Lka", "Dev", "lka@gmail.com", "mockedPassword", null);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any())).thenReturn(user);
         // When

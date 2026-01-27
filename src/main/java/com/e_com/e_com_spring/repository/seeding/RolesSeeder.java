@@ -1,28 +1,22 @@
 package com.e_com.e_com_spring.repository.seeding;
 
-import com.e_com.e_com_spring.model.Role;
-import com.e_com.e_com_spring.model.RoleType;
-import com.e_com.e_com_spring.repository.RoleRepository;
-import com.e_com.e_com_spring.service.common.PrivilegeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RolesSeeder {
-    private final RoleRepository roleRepository;
-    private final PrivilegeService privilegeService;
+    private final AdminRoleSeeder adminRoleSeeder;
+    private final CustomerRoleSeeder customerRoleSeeder;
 
+    @Transactional
     public void seed() {
-        Optional<Role> optionalRole = roleRepository.findByRoleType(RoleType.ROLE_ADMIN);
-        if (optionalRole.isEmpty()){
-            Role adminRole = new Role();
-            adminRole.setName("Admin");
-            adminRole.setRoleType(RoleType.ROLE_ADMIN);
-            adminRole.setPrivileges(privilegeService.getAll());
-            roleRepository.save(adminRole);
-        }
+        log.info("RoleSeeder Started");
+        adminRoleSeeder.seed();
+        customerRoleSeeder.seed();
+        log.info("RoleSeeder Ended");
     }
 }

@@ -26,7 +26,7 @@ public class UserController {
 
     @PutMapping("{id}/enable")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserMiniDto> enable(@PathVariable Long userId, @CurrentUser User currentUser){
-        return ResponseEntity.ok(userService.disable(userId, currentUser));
+    public ResponseEntity<UserMiniDto> enable(@PathVariable(name = "id") Long userId, @CurrentUser User currentUser){
+        return ResponseEntity.ok(userService.enable(userId, currentUser));
     }
 }

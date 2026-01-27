@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.shaded.org.bouncycastle.mime.Headers;
 
 import java.util.Optional;
 
@@ -107,7 +106,6 @@ class UserControllerTest {
             assertNotNull(customer.getId(), "Customer ID should not be null");
             Optional<User> customerBefore = userRepository.findById(customer.getId());
             assertTrue(customerBefore.isPresent(), "Customer should exist in database before disable");
-            
             mockMvc.perform(
                             put("/users/{id}/disable", customer.getId())
                                     .headers(adminHeaders)
@@ -146,10 +144,8 @@ class UserControllerTest {
             customer.setEnabled(false);
             userRepository.save(customer);
             userRepository.flush();
-            
             assertNotNull(customer, "Customer should not be null");
             assertNotNull(customer.getId(), "Customer ID should not be null");
-            
             mockMvc.perform(
                             put("/users/{id}/enable", customer.getId())
                                     .headers(adminHeaders)

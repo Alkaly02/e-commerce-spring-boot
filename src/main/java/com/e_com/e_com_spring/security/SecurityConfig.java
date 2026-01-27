@@ -47,9 +47,7 @@ public class SecurityConfig {
                                         .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(request ->{
-                    request.requestMatchers("/auth/register", "/auth/login").permitAll();
-                    // TODO: check correct swagger index page
-                    request.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs").permitAll();
+                    request.requestMatchers("/auth/register", "/auth/login").permitAll();                    request.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs").permitAll();
                     request.anyRequest().authenticated();
                 });
 

@@ -1,11 +1,10 @@
-package com.e_com.e_com_spring.mapper.user;
+package com.e_com.e_com_spring.mapper;
 
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.dto.user.UserMiniDto;
 import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.RoleType;
 import com.e_com.e_com_spring.model.User;
-import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

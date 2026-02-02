@@ -1,7 +1,7 @@
 package com.e_com.e_com_spring.service.admin.user;
 
 import com.e_com.e_com_spring.dto.user.UserMiniDto;
-import com.e_com.e_com_spring.mapper.user.UserMapper;
+import com.e_com.e_com_spring.mapper.UserMapper;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.service.admin.user.checker.IChecker;
 import com.e_com.e_com_spring.service.admin.user.handleStatus.IStatusHandler;

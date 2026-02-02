@@ -1,7 +1,7 @@
 package com.e_com.e_com_spring.service.auth.createUser;
 
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
-import com.e_com.e_com_spring.mapper.user.UserMapper;
+import com.e_com.e_com_spring.mapper.UserMapper;
 import com.e_com.e_com_spring.model.Role;
 import com.e_com.e_com_spring.model.RoleType;
 import com.e_com.e_com_spring.model.User;

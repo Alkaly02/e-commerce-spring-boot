@@ -4,7 +4,7 @@ import com.e_com.e_com_spring.dto.auth.LoginPostDto;
 import com.e_com.e_com_spring.dto.auth.LoginResponseDto;
 import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.dto.auth.RegisterResponseDto;
-import com.e_com.e_com_spring.mapper.user.UserMapper;
+import com.e_com.e_com_spring.mapper.UserMapper;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.service.auth.checker.IAuthChecker;
 import com.e_com.e_com_spring.service.auth.createUser.ICreateUserService;

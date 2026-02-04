@@ -5,6 +5,7 @@ import com.e_com.e_com_spring.dto.category.CategoryPostDto;
 import com.e_com.e_com_spring.exception.CustomException;
 import com.e_com.e_com_spring.mapper.CategoryMapper;
 import com.e_com.e_com_spring.repository.CategoryRepository;
+import com.e_com.e_com_spring.service.admin.category.logic.ICategoryLogic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final ICategoryLogic categoryLogic;
 
     @Override
     public CategoryGetDto create(CategoryPostDto postDto) {
@@ -29,19 +31,11 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public CategoryGetDto update(Long id, CategoryPostDto putDto) {
-        return categoryRepository.findById(id).map(category -> {
-            category.setName(putDto.getName());
-            return categoryMapper.toGetDto(categoryRepository.save(category));
-        }).orElseThrow(() -> new CustomException("Category not found", HttpStatus.NOT_FOUND));
+        return categoryLogic.update(id, putDto);
     }
 
     @Override
     public void delete(Long id) {
-        categoryRepository.findById(id).ifPresentOrElse(
-                categoryRepository::delete,
-                () -> {
-                    throw new CustomException("Category not found", HttpStatus.NOT_FOUND);
-                }
-        );
+        categoryLogic.delete(id);
     }
 }

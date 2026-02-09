@@ -17,5 +17,7 @@
              relativeToChangelogFile="true" />
     <include file="changelog/2026_01_12_1768219906_insert_default_privileges.xml"
              relativeToChangelogFile="true" />
+    <include file="changelog/2026_02_09_1770654439_create_categories_table.xml"
+             relativeToChangelogFile="true" />
 
 </databaseChangeLog>

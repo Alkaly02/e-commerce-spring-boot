@@ -131,7 +131,7 @@ class UserControllerTest {
                             .headers(customerHeaders)
                             .contentType(MediaType.APPLICATION_JSON)
             )
-                    .andExpect(status().isInternalServerError())
+                    .andExpect(status().isForbidden())
                     .andExpect(jsonPath("$.error").value("Access Denied"));
         }
     }

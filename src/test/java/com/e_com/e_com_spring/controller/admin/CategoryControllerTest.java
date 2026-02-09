@@ -5,6 +5,7 @@ import com.e_com.e_com_spring.dto.auth.RegisterPostDto;
 import com.e_com.e_com_spring.dto.category.CategoryPostDto;
 import com.e_com.e_com_spring.model.User;
 import com.e_com.e_com_spring.repository.CategoryRepository;
+import com.e_com.e_com_spring.repository.UserRepository;
 import com.e_com.e_com_spring.util.UserUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +36,9 @@ class CategoryControllerTest extends TestContainerConfig {
 
     @Autowired
     private UserUtils userUtils;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private RegisterPostDto adminRegister;
     private RegisterPostDto customerRegister;
@@ -67,6 +71,7 @@ class CategoryControllerTest extends TestContainerConfig {
 
     @AfterEach
     void tearDown(){
+        userRepository.deleteAll();
         adminRegister = null;
         admin = null;
         customerRegister = null;
@@ -105,7 +110,7 @@ class CategoryControllerTest extends TestContainerConfig {
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .headers(customerHeaders)
                     )
-                    .andExpect(status().isInternalServerError())
+                    .andExpect(status().isForbidden())
                     .andExpect(jsonPath("$.error").value("Access Denied"));
         }
     }

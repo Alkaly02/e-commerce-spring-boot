@@ -10,6 +10,6 @@ public interface IProductService {
     ProductGetDto create(ProductPostDto postDto);
     List<ProductGetDto> search(Pageable page);
     ProductGetDto getById(Long id);
-    ProductGetDto update(Long id);
+    ProductGetDto update(Long id, ProductPostDto putDto);
     void delete(Long id);
 }

@@ -1,4 +1,9 @@
 package com.e_com.e_com_spring.dto;
 
-public class AuditDto {
+import lombok.Data;
+
+@Data
+public class AuditDto extends DateAuditDto {
+    Long createdBy;
+    Long updatedBy;
 }

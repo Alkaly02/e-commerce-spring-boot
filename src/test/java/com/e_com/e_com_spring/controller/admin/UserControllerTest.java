@@ -57,15 +57,6 @@ class UserControllerTest {
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
-    @BeforeAll
-    static void beforeAll(){
-        postgres.start();
-    }
-    @AfterAll
-    static void afterAll(){
-        postgres.stop();
-    }
-
     @BeforeEach
     void setUp(){
         adminRegister = userUtils.createRegisterPostDto(

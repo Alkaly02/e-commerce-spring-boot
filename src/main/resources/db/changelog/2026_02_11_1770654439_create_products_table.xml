@@ -13,7 +13,7 @@
             <column name="name" type="VARCHAR(50)">
                 <constraints nullable="false "/>
             </column>
-            <column name="category_id" />
+            <column name="category_id" type="BIGINT" />
 
             <column name="created_at" type="DATETIME">
                 <constraints nullable="false" />

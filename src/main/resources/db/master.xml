@@ -19,5 +19,7 @@
              relativeToChangelogFile="true" />
     <include file="changelog/2026_02_09_1770654439_create_categories_table.xml"
              relativeToChangelogFile="true" />
+    <include file="changelog/2026_02_11_1770654439_create_products_table.xml"
+             relativeToChangelogFile="true" />
 
 </databaseChangeLog>

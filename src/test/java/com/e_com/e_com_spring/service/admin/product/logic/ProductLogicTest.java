@@ -3,6 +3,7 @@ package com.e_com.e_com_spring.service.admin.product.logic;
 import com.e_com.e_com_spring.dto.category.CategoryGetDto;
 import com.e_com.e_com_spring.dto.product.ProductGetDto;
 import com.e_com.e_com_spring.dto.product.ProductPostDto;
+import com.e_com.e_com_spring.exception.CustomException;
 import com.e_com.e_com_spring.mapper.ProductMapper;
 import com.e_com.e_com_spring.model.Category;
 import com.e_com.e_com_spring.model.Product;
@@ -15,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +63,40 @@ class ProductLogicTest {
             Product capturedProduct = productCaptor.getValue();
             assertEquals(postDto.getName(), capturedProduct.getName());
             assertEquals(postDto.getCategoryId(), capturedProduct.getCategory().getId());
+        }
+    }
+
+    @Nested
+    class GetByIdTests{
+        @Test
+        void shouldFindProduct_WhenProductExists(){
+            // Arrange
+            Long existingId = 1L;
+            Product existingProduct = createProduct(1L, "Phone", 1L);
+            ProductGetDto productGetDto = createGetDto(1L, "Phone", 1L);
+
+            when(productRepository.findById(existingId)).thenReturn(Optional.of(existingProduct));
+            when(productMapper.toGetDto(any(Product.class))).thenReturn(productGetDto);
+
+            // Act
+            ProductGetDto actual = productLogic.getById(existingId);
+
+            // Assert
+            assertNotNull(actual);
+        }
+
+        @Test
+        void shouldThrowException_WhenProductNotFound(){
+            // Arrange
+            Long notExistingId = 999L;
+            when(productRepository.findById(notExistingId)).thenReturn(Optional.empty());
+
+            // Act
+            CustomException exception = assertThrows(CustomException.class, () -> productLogic.getById(notExistingId));
+
+            // Assert
+            assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+            assertEquals(exception.getMessage(), "Product not found");
         }
     }
 

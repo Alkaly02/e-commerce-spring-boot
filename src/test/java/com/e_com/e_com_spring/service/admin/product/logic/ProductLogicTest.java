@@ -100,6 +100,11 @@ class ProductLogicTest {
         }
     }
 
+    @Nested
+    class UpdateTests{
+
+    }
+
     private ProductPostDto createPostDto(String name, Long catId) {
         return ProductPostDto.builder().name(name).categoryId(catId).build();
     }

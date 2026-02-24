@@ -101,5 +101,10 @@ class ProductControllerTest extends TestContainerConfig {
                     .andExpect(jsonPath("$.name").isNotEmpty())
                     .andExpect(jsonPath("$.category.id").value(categoryGetDto.getId()));
         }
+
+        @Test
+        void not_admin_cannot_create_a_product(){
+
+        }
     }
 }

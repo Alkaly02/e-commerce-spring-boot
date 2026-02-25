@@ -19,7 +19,7 @@ public class ProductService implements IProductService{
 
     @Override
     public ProductGetDto create(ProductPostDto postDto, User currentUser) {
-        userChecker.canPerformAdminAction(currentUser);
+        userChecker.canPerformAdminAction(currentUser); // TODO: change to currentUser.isAdmin()
         return productLogic.create(postDto);
     }
 

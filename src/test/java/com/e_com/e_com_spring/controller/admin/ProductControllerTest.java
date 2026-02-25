@@ -6,9 +6,12 @@ import com.e_com.e_com_spring.dto.category.CategoryGetDto;
 import com.e_com.e_com_spring.dto.category.CategoryPostDto;
 import com.e_com.e_com_spring.dto.product.ProductPostDto;
 import com.e_com.e_com_spring.model.User;
+import com.e_com.e_com_spring.repository.UserRepository;
+import com.e_com.e_com_spring.service.admin.category.ICategoryService;
 import com.e_com.e_com_spring.service.admin.product.IProductService;
 import com.e_com.e_com_spring.util.UserUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,10 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,6 +43,12 @@ class ProductControllerTest extends TestContainerConfig {
 
     @Autowired
     private UserUtils userUtils;
+
+    @Autowired
+    private ICategoryService categoryService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private RegisterPostDto adminRegister;
     private RegisterPostDto customerRegister;
@@ -72,25 +80,17 @@ class ProductControllerTest extends TestContainerConfig {
         customerHeaders = userUtils.getHttpHeaders(customer.getEmail());
     }
 
+    @AfterEach
+    void tearDown(){
+        userRepository.deleteAll();
+    }
+
     @Nested
     class CreateTests{
         @Test
         void admin_can_create_a_product() throws Exception{
-            CategoryPostDto categoryPostDto = CategoryPostDto.builder()
-                    .name("Category 1")
-                    .build();
-            MvcResult result = mockMvc.perform(
-                    post("/categories")
-                            .content(objectMapper.writeValueAsString(categoryPostDto))
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .headers(adminHeaders)
-            ).andReturn();
-
-            String categoryGetDtoJson = result.getResponse().getContentAsString();
-            CategoryGetDto categoryGetDto = objectMapper.readValue(categoryGetDtoJson, CategoryGetDto.class);
-
-            productPostDto = ProductPostDto.builder().name("Product 1").categoryId(categoryGetDto.getId()).build();
-
+            CategoryGetDto categoryGetDto = categoryService.create(createCategoryPostDTO("Category "));
+            productPostDto = createProductPostDTO("Product 1", categoryGetDto.getId());
             mockMvc.perform(
                     post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -103,8 +103,31 @@ class ProductControllerTest extends TestContainerConfig {
         }
 
         @Test
-        void not_admin_cannot_create_a_product(){
-
+        void not_admin_cannot_create_a_product() throws Exception{
+            CategoryGetDto categoryGetDto = categoryService.create(createCategoryPostDTO("Category 2"));
+            ProductPostDto productPostDto = createProductPostDTO("Product 2",categoryGetDto.getId());
+            mockMvc.perform(
+                    post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .headers(customerHeaders)
+                            .content(objectMapper.writeValueAsString(productPostDto))
+                    )
+                    .andExpect(jsonPath("$.error").value("Forbidden"))
+                    .andExpect(jsonPath("$.message").value("You are not allowed to perform this action"))
+                    .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()));
         }
+    }
+
+    private CategoryPostDto createCategoryPostDTO(String name){
+        return CategoryPostDto.builder()
+                .name(name)
+                .build();
+    }
+
+    private ProductPostDto createProductPostDTO(String productName, Long categoryId){
+        return ProductPostDto.builder()
+                .name(productName)
+                .categoryId(categoryId)
+                .build();
     }
 }
